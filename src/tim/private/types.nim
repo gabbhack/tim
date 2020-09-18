@@ -5,7 +5,6 @@ import options
 
 type
     PollingHandler* = proc(bot: Bot, update: Update): Future[bool] {.async, gcsafe.}
-    WebhookHandler* = proc(bot: Bot, update: Update): Future[bool] {.async, gcsafe.}
 
     Bot* = ref object
         defaultAPI*: string

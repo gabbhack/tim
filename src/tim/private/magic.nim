@@ -107,11 +107,3 @@ template asPollingHandler*(body: untyped): untyped {.dirty.} =
             let pollingMode {.inject, used.} = true
             body
     )
-
-
-template asWebhookHandler*(body: untyped): untyped {.dirty.} =
-    (proc (bot: Bot, update: Update): Future[bool] {.async.} =
-        block:
-            let webhookMode {.inject, used.} = true
-            body
-    )
