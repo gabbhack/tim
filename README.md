@@ -18,20 +18,62 @@ addHandler(newConsoleLogger(lvlInfo))
 
 let bot = newBot("TOKEN")
 
-module base:
+module general:
     isMsg:
         isText:
             dawait message.answer(message.text.get())
 
 
-bot.poll(asPollingHandler(base))
+bot.poll(asPollingHandler(general))
+```
+
+### Modules
+
+```nim
+module admin:
+  txt "/ban", "/kick":
+    userId 123:
+      txt "/ban":
+        dawait message.answer("Ban!")
+      txt "/kick":
+        dawait message.answer("Kick!")
+    dawait message.answer("You are not admin")
+
+module base:
+  txt "/start":
+    dawait message.answer("Start!")
+
+module general:
+  isMsg:
+    isText:
+      admin
+      base
+```
+
+### Pre and post actions
+
+```nim
+module base:
+  txt "/start":
+    after:
+      echo "pre action on /start cmd"
+      dawait message.answer("Start!")
+    do:
+      echo "post action on /start cmd"
+
+module general:
+  isMsg:
+    isText:
+        after:
+            echo "pre action on any text"
+            base
+        do:
+            echo "post action on any text"
 ```
 
 ### Create own filters
 
 ```nim
-import tim
-
 # Simple filter
 defineFilter isAdmin:
   update.message.get().`from`.id == 123
