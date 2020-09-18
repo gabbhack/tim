@@ -1,5 +1,7 @@
 # tim
 
+This is the MVP of an idea that I decided to implement on Nim. The project will most likely not be developed.
+
 ## Installation
 
 `nimble install https://github.com/gabbhack/tim`
