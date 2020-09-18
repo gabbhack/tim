@@ -2,7 +2,7 @@ import macros, asyncdispatch
 
 
 template module*(title: untyped{ident}, body: untyped): untyped =
-    template title* =
+    template title*: untyped =
         body
 
 
