@@ -1,5 +1,5 @@
 from net import TimeoutError
-import asyncdispatch, httpclient, json
+import asyncdispatch, httpclient, json, logging
 
 import errors, types
 
@@ -17,6 +17,7 @@ template withClient(actions: untyped): untyped {.dirty.} =
 
 
 proc parseResult[T](body: string): Result[T] {.inline.} =
+    debug("Request result body: ", body)
     return parseJson(body).to(Result[T])
 
 
