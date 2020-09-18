@@ -11,14 +11,18 @@ This is the MVP of an idea that I decided to implement on Nim. The project will 
 ### Echo bot
 
 ```nim
+import asyncdispatch, options, logging
 import tim
 
-bot = newBot("TOKEN")
+addHandler(newConsoleLogger(lvlInfo))
+
+let bot = newBot("TOKEN")
 
 module base:
-  isMsg:
-    isText:
-      dawait message.answer(message.text.get())
+    isMsg:
+        isText:
+            dawait message.answer(message.text.get())
+
 
 bot.poll(asPollingHandler(base))
 ```
