@@ -1,22 +1,9 @@
 import macros, asyncdispatch
 
 
-template module*(title: untyped{ident}, body: typed): untyped =
+template module*(title: untyped{ident}, body: untyped): untyped =
     template title* =
         body
-
-
-template router*(title: untyped{ident}, body: typed) =
-    template name*: untyped =
-        proc name(): Future[bool] {.async.} =
-            block:
-                body
-                break
-        let r = name()
-        yield r
-        if r.read():
-            result = true
-            break
 
 
 macro defineFilter*(title: untyped{ident}, filterBody: untyped): untyped =
@@ -69,29 +56,29 @@ macro defineFilter*(title: untyped{nkObjConstr}, filterBody: untyped): untyped =
     result.add(tmp)
 
 
-template defineInjector*(title: untyped{ident}, name: untyped{ident}, injectorBody: typed) =
+template defineInjector*(title: untyped{ident}, name: untyped{ident}, injectorBody: untyped): untyped =
     template `title`* =
         let `name` {.inject.} = `injectorBody`
 
 
-template withToken*(token: string, body: typed) =
+template withToken*(token: string, body: untyped): untyped =
     block:
         let magicTokenRewrite {.inject.} = token
         body
 
 
-template mawait*(future: Future) =
+template mawait*(future: Future): untyped =
     # custom magic await because normal doesnt work in templates
     let x = future
     yield x
     x.read()
 
 
-template dawait*(future: Future) =
+template dawait*(future: Future): untyped =
     discard mawait(future)
 
 
-template after*(body, after: typed) =
+template after*(body, after: untyped): untyped =
     # defer doesnt work because of https://github.com/nim-lang/Nim/issues/15243
     try:
         block:
