@@ -50,9 +50,11 @@ bot.poll(asPollingHandler(general))
 
 ### Modules
 
+Modules are a tool for separating your logic. You can create as many modules as you want and embed them in each other. Modules are zero-cost, since the code from them is simply substituted during compilation.
+
 ```nim
 module admin:
-  txt "/ban", "/kick":
+  txt ["/ban", "/kick"]:
     userId 123:
       txt "/ban":
         dawait message.answer("Ban!")
@@ -72,6 +74,8 @@ module general:
 ```
 
 ### Pre and post actions
+
+Since the code from the module is simply substituted, and filters are normal conditions, it is very easy to do preactions - you just perform the necessary actions before the main ones. However, for postactions, you need to use a special `after` macro.
 
 ```nim
 module base:
@@ -102,6 +106,10 @@ defineFilter isAdmin:
 # Filter with arguments
 defineFilter chatId(cid: static[int]):
   update.message.get().chat.id == cid
+
+# You can also use overloading
+defineFilter chatId(cids: static[openArray[int]):
+  update.message.get().chat.id in cids
 
 # Filter with pre-action body
 defineFilter isInline, update.inline_query.isSome():
