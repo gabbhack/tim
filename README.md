@@ -2,6 +2,28 @@
 
 This is the MVP of an idea that I decided to implement on Nim. The project will most likely not be developed.
 
+The main idea of the project is to make effective routing. In most frameworks, handlers are brute-forced, and the same filters are executed several times.
+
+In tim, all filters are expanded to normal conditions at compile time. So
+
+```nim
+isMsg:
+  isText:
+    txt "/start":
+      ...
+```
+
+turns into something like
+
+```nim
+if update.message.isSome():
+  if update.message.get().text.isSome():
+    if update.message.text.get() == "/start":
+      ...
+```
+
+This means that the filter will be executed at most once.
+
 ## Installation
 
 `nimble install https://github.com/gabbhack/tim`
@@ -22,7 +44,6 @@ module general:
     isMsg:
         isText:
             dawait message.answer(message.text.get())
-
 
 bot.poll(asPollingHandler(general))
 ```
