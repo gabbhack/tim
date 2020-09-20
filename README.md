@@ -98,8 +98,11 @@ module general:
 
 ### Create own filters
 
+Filters are divided into three types: simple, with arguments, and with preactions. The filter body can be anything, but the last expression must be of type bool.
+
 ```nim
 # Simple filter
+# Do not accept arguments and their name usually starts with "is".
 defineFilter isAdmin:
   update.message.get().`from`.id == 123
 
@@ -112,6 +115,7 @@ defineFilter chatId(cids: static[openArray[int]):
   update.message.get().chat.id in cids
 
 # Filter with pre-action body
+# Commonly used to injecting shortcuts.
 defineFilter isInline, update.inline_query.isSome():
   let inline_query {.inject, used.} = update.inline_query.get()
 ```
